@@ -1,14 +1,4 @@
 
 # dependencies
 /node_modules
-/public2
-/routes
-/config
-/models
-/techa2
-app.js
-note.txt
-package-lock.json
-package.json
-
 .env

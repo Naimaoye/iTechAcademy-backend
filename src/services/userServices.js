@@ -1,4 +1,6 @@
 import User from '../models/user';
+import Companies from '../models/companies';
+import Helper from '../utils/Helper'
 
 
 /**
@@ -17,20 +19,43 @@ export default class UserService {
    */
   static async signup(userCredentials) {
     let {
-      firstName, lastName, email, password, registerAs
+      firstName, lastName, email, password
     } = userCredentials;
     firstName = firstName.trim();
     lastName = lastName.trim();
     email = email.trim().toLowerCase();
     password = password;
-    registerAs = registerAs;
-    const user = {
-      firstName, lastName, email, password, registerAs
+    let user = {
+      firstName, lastName, email, password
     };
 
-    const newUser = new User(user);
+    let newUser = new User(user);
     console.log(newUser);
     return await newUser.save();
+  }
+
+   /**
+   * @method signupCompany
+   * @description Medium between the database and UserController
+   * @static
+   * @param {object} userCredentials - data object
+   * @returns {object} JSON response
+   * @memberof UserService
+   */
+  static async signupCompany(userCredentials) {
+    let {
+      companyName, email, password
+    } = userCredentials;
+    companyName = companyName.trim();
+    email = email.trim().toLowerCase();
+    password = password;
+    const company = {
+      companyName, email, password
+    };
+
+    const newCompany = new Companies(company);
+    console.log(newCompany);
+    return await newCompany.save();
   }
 
   /**
@@ -54,17 +79,24 @@ export default class UserService {
     return user;
   }
 
-  /**
-   * @method findUser
-   * @description Medium between the database and UserController
+   /**
+   * @method signinCompany
+   * @description Signs in user with valid credentials
    * @static
-   * @param {object} id - data number
+   * @param {object} loginCredentials - data object
    * @returns {object} JSON response
    * @memberof UserService
-  */
- static async findUser(_id) {
-  const user = await User.findOne({ _id });
-  return user;
-}
+   */
+  static async signinCompany(loginCredentials) {
+    let { email } = loginCredentials;
+    email = email.trim().toLowerCase();
+    const foundUser = await Companies.findOne({ email });
+    const user = {
+      id: foundUser.id,
+      email: foundUser.email,
+      companyName: foundUser.companyName,
+    };
+    return user;
+  }
   
 }

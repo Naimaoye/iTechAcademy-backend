@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const uri = process.env.MONGO_URL;
+const uri = process.env.mlab;
 
 
 export default uri;

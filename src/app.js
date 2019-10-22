@@ -22,7 +22,7 @@ app.use('/api/v1', userRoute);
 
 mongoose.connect(uri)
     .then(() => console.log('Now connected to the DB!'))
-    .catch(err => console.error('Something went wrong', err));
+    .catch(err => console.error('Something has gone wrong', err));
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);

@@ -20,9 +20,12 @@ app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1', userRoute);
 
-mongoose.connect(uri)
-    .then(() => console.log('Now connected to the DB!'))
-    .catch(err => console.error('Something went wrong', err));
+mongoose.connect(uri, (err) => {
+  if(err){
+    console.log('error', err);
+  }
+  console.log('connected to the DB!');
+});
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);

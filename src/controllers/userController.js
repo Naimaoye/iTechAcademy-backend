@@ -5,8 +5,6 @@ import sendEmails from '../utils/email';
 import transporter from '../utils/transporter';
 import User from '../models/user';
 import Companies from '../models/companies';
-import bcrypt from 'bcryptjs';
-import { request } from 'http';
 
 
 /**

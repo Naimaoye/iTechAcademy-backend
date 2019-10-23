@@ -1,15 +1,12 @@
-import nodemailer from 'nodemailer';
+import mailerGun from 'nodemailer-mailgun-transport';
 
-const senderEmail = process.env.EMAIL;
 
-const transporter = () => nodemailer.createTransport({
-  host:'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: senderEmail,
-    pass: process.env.EMAIL_PASSWORD
-  }
-});
+const transporter = () => nodemailer.createTransport(mailerGun({
+    auth:{
+        domain: process.env.domain,
+        api_key: process.env.api_key
+    }
+}));
+
 
 export default transporter;

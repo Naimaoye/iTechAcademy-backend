@@ -72,6 +72,30 @@ const emailExists = (req, res, next) => {
     });
   };
   
+  /**
+ * @function
+ * @description Check if email is already exists
+ * @param {object} req - Resquest object
+ * @param {object} res - Response object
+ * @param {object} next
+ * @returns {object} JSON response
+ */
+const companyEmailExists = (req, res, next) => {
+  Companies.findOne({ email: req.body.email.trim().toLowerCase() }).then(data => {
+    if (data) {
+      return res.status(409).json({
+          status: 409, 
+          message: 'email already in use'
+      });
+    }
+    next();
+  }).catch(() => {
+    return res.status(500).json({
+        status: 500, 
+        message: 'database error'
+      });
+  });
+};
   
   /**
    * @function
@@ -178,6 +202,6 @@ const emailExists = (req, res, next) => {
  
 
   export default {
-    validateEmail, validateLogin, validateUser, emailExists, validateCompanyLogin, resetPassword
+    validateEmail, validateLogin, validateUser, emailExists, validateCompanyLogin, resetPassword, companyEmailExists
   };
   

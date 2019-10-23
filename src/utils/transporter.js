@@ -1,4 +1,5 @@
 import mailerGun from 'nodemailer-mailgun-transport';
+import nodemailer from 'nodemailer'
 
 
 const transporter = () => nodemailer.createTransport(mailerGun({

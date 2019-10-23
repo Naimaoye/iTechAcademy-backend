@@ -11,7 +11,7 @@ userRoute.post('/user/signup',
 
 userRoute.post('/user/signupCompany',
   userValidations.validateUser('signupCompany'),
-  userValidations.emailExists,
+  userValidations.companyEmailExists,
   UserController.signupCompany);
 
 userRoute.post('/user/signin',

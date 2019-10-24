@@ -193,24 +193,28 @@ export default class UserController {
      * @memberof UserController
     */
     static async verifyUserEmail(req, res) {
-      const { token } = req.params;
-      const { _id, email } = Helper.verifyToken(token);
-      User.findOneAndUpdate(_id, { isVerified: true }, { new: true })
-       .then(user => {
-         if (email === user.email && user.isVerified) {
-           console.log(user);
-          return res.status(200).json({
-          status: 200, 
-          message: 'Your account has been verified successfully'
-          });
-        }
-        }).catch(err => {
-          console.log(err);
-        return res.status(500).json({
-        status: 500, 
-        message: 'Something went wrong'
-        });
+    const { token } = req.params;
+    const { _id, email } = Helper.verifyToken(token);
+    console.log(email);
+    Companies.findOne({_id: _id},(err,response)=> {
+      response.isVerified = true;
+      response.save((err,data)=> {
+      if(err) {
+        res.status(500).json({
+          status: 500,
+          message: "Unable to complete verification",
+          error: err
+        })
+      }
+      else{
+        console.log(data);
+      res.status(200).json({
+        status: 200,
+        message: 'Your account has been verified successfully'
       })
+      }
+    });
+  });
   }
 
    /**
@@ -225,22 +229,27 @@ export default class UserController {
    static async verifyCompanyEmail(req, res) {
     const { token } = req.params;
     const { _id, email } = Helper.verifyToken(token);
-    Companies.findOneAndUpdate(_id, { isVerified: true }, { new: true })
-     .then(company => {
-       if (email === company.email && company.isVerified) {
-         console.log(company);
-        return res.status(200).json({
-        status: 200, 
-        message: 'Your account has been verified successfully'
-        });
+    console.log(email);
+    Companies.findOne({_id: _id},(err,response)=> {
+      response.isVerified = true;
+      response.save((err,data)=> {
+      if(err) {
+        res.status(500).json({
+          status: 500,
+          message: "Unable to complete verification",
+          error: err
+        })
       }
-      }).catch(err => {
-        console.log(err);
-      return res.status(500).json({
-      status: 500, 
-      message: 'Something went wrong'
-      });
-    })
+      else{
+        console.log(data);
+      res.status(200).json({
+        status: 200,
+        message: 'Your account has been verified successfully'
+      })
+      }
+    });
+  });
+    
 }
 
 /**

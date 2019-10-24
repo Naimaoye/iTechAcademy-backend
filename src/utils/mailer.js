@@ -6,7 +6,14 @@ const sendEmail = (transport, emailData) => new Promise((resolve, reject) => {
     to: `${emailData.recipientEmail}`,
     subject: `${emailData.subject}`, // Subject line
     html: `${emailData.body}`
-  }, (err, info) => (err ? reject(err) : resolve(info)));
+  }, (err, info) => {
+    if(err){
+      console.log(err);
+    }
+    else{
+    console.log(info);
+    }
+  });
 });
 
 export default sendEmail;

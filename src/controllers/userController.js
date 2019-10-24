@@ -196,7 +196,7 @@ export default class UserController {
     const { token } = req.params;
     const { _id, email } = Helper.verifyToken(token);
     console.log(email);
-    Companies.findOne({_id: _id},(err,response)=> {
+    User.findOne({_id: _id},(err,response)=> {
       response.isVerified = true;
       response.save((err,data)=> {
       if(err) {

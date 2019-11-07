@@ -6,8 +6,10 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import uri from './config/db';
 import userRoute from './routes/userRoute';
+import studentRoute from './routes/studentRoute'
 
 const app = express();
+
 
 //Configure isProduction variable
 const isProduction = process.env.NODE_ENV === 'production';
@@ -19,6 +21,7 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1', userRoute);
+app.use('/api/v1', studentRoute);
 
 mongoose.connect(uri, (err) => {
   if(err){

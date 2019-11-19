@@ -10,6 +10,7 @@ const userSchema =  new mongoose.Schema({
     isAdmin: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
     role: { type: String, default: '' },
+    course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
     createdAt: { type: Date, default: Date.now }
 });
 

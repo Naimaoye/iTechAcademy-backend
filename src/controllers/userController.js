@@ -5,7 +5,7 @@ import sendEmails from '../utils/email';
 import transporter from '../utils/transporter';
 import User from '../models/user';
 import Companies from '../models/companies';
-
+import Staff from '../models/staff';
 
 /**
  * @class
@@ -69,11 +69,11 @@ export default class UserController {
           firstName: response.firstName,
           lastName: response.lastName,
           password: response.password,
-          registerAs: response.registerAs,
+          isAdmin: response.isAdmin,
           createdAt: response.createdAt
         };
-        let { email, _id, createdAt } = result;
-        let token = Helper.generateToken({ _id, email, createdAt });
+        let { email, _id, isAdmin, createdAt } = result;
+        let token = Helper.generateToken({ _id, email, isAdmin, createdAt });
         let mailData = UserController.composeVerificationMail(email, host, token);
         sendEmail(transporter(), mailData);
         return res.status(201).json({
@@ -142,7 +142,7 @@ export default class UserController {
       const loginCredentials = req.body;
       UserService.signin(loginCredentials).then(response => {
         const token = Helper.generateToken({ _id: response._id, email: response.email, 
-          createdAt: response.createdAt });
+          createdAt: response.createdAt, isAdmin: response.isAdmin });
         return res.status(200).json({
           status: 200, 
           message:'Login successful.', 
@@ -423,5 +423,57 @@ export default class UserController {
     });
 
   } 
+
+  /**
+   * @method addInstructor
+   * @description Medium between the database and UserController
+   * @static
+   * @param {object} userCredentials - data object
+   * @returns {object} JSON response
+   */
+  static async addInstructor(req, res) {
+    let { fullName, password, email, phoneNumber, course } = req.body;
+    course = course.split(',');
+    // console.log(newCourse,"course");
+    let instructor = {
+      fullName, password, email, phoneNumber, course
+    };
+    let isAdmin = req.user.isAdmin;
+     if (!isAdmin) {
+      console.log("isAdmin", isAdmin);
+      res.status(403).json({
+      status: 403,
+      error: 'Unauthorized!, contact your admin',
+    });
+  }
+  await Staff.findOne({ email: email.trim().toLowerCase() }).then(response=>{
+    if(!response){
+      let newInstructor = new Staff(instructor);
+      console.log("course",newInstructor);
+      newInstructor.save((err, data)=>{
+      console.log("data", data)
+    if(err){
+      console.log(error);
+      res.status(500).json({
+        status: 500, 
+        error: 'database error'
+      });
+    }
+    else{
+      res.status(201).json({
+        status: 201, 
+        data: data
+      });
+    }
+  })
+  }
+  else{
+    res.status(403).json({
+      status: 403, 
+      error: 'Instructor already exist'
+    })
+  }
+})
+} 
 
 }

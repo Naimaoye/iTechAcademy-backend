@@ -74,7 +74,8 @@ export default class UserService {
       id: foundUser.id,
       email: foundUser.email,
       firstName: foundUser.firstName,
-      lastName: foundUser.lastName
+      lastName: foundUser.lastName,
+      isAdmin: foundUser.isAdmin
     };
     return user;
   }

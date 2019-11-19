@@ -96,7 +96,7 @@ const companyEmailExists = (req, res, next) => {
       });
   });
 };
-  
+
   /**
    * @function
    * @description Check if user email exist, password correct and verified

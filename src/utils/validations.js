@@ -34,9 +34,20 @@ const registerAs = Joi.string()
     .label('Are you registering as a student or company?');
 
 const courseName = Joi.string()
-    .label('course of study is required');
+    .label('course name is required');
 
-const course
+const courseCode = Joi.string()
+    .label('course code is required');
+
+const title = Joi.string()
+    .label('title is required');
+
+const description = Joi.string()
+    .label('job description is required');
+
+const company = Joi.string()
+    .label('company name is required');
+
 
 
 export default {
@@ -63,7 +74,11 @@ export default {
     fullName,
     email,
     phoneNumber,
-    course,
+    courseName,
     amount
   }),
+  courses: Joi.object().keys({
+   courseName,
+   courseCode
+  })
 };

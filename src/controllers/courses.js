@@ -3,9 +3,9 @@ import Courses from '../models/courses';
 /**
  * @class
  * @description A container class for all controllers
- * @exports Courses
+ * @exports AllCourses
  */
-export default class Courses {
+export default class AllCourses {
  /**
    * @method
    * @description compose successful registration message
@@ -17,24 +17,18 @@ export default class Courses {
   static AddCourses (req, res){
    let { courseName, courseCode } = req.body;
    let course = { courseName, courseCode };
-   if (!req.user.isAdmin) {
-    return res.status(403).json({
+   let isAdmin = req.user.isAdmin;
+   if (!isAdmin) {
+    console.log("isAdmin", isAdmin);
+    res.status(403).json({
       status: 403,
       error: 'Unauthorized!, contact your admin',
     });
   }
-  Courses.findOne({ name: name.trim().toLowerCase() }).then(response=>{
-    if(response.name){
-      res.status(403).json({
-        status: 403, 
-        error: 'course already exist'
-      })
-    }
-    else{
+  Courses.findOne({ courseName: courseName.trim().toLowerCase() }).then(response=>{
+    if(!response){
     let newCourse = new Courses(course);
-    console.log("course",newCourse);
     newCourse.save((err, data)=>{
-    console.log("data", data)
     if(err){
       console.log(error);
       res.status(500).json({
@@ -49,9 +43,16 @@ export default class Courses {
       });
     }
   })
+  }
+  else{
+    res.status(403).json({
+      status: 403, 
+      error: 'course already exist'
+    })
 }
 })
 }
+
 
 
 

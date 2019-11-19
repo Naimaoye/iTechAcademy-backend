@@ -1,10 +1,9 @@
-import Helper from '../utils/Helper';
 import sendEmail from '../utils/mailer';
 import transporter from '../utils/transporter';
 import Courses from '../models/courses';
 import Enroll from '../models/enrollment';
 import Users from '../models/user';
-import studentServices from '../services/studentServices'
+import Jobs from '../models/jobs';
 
 /**
  * @class
@@ -39,10 +38,8 @@ export default class Students {
 static enrollStudents(req, res) {
   let { email } = req.body;
   Users.findOne({ email: email.trim().toLowerCase(), isVerified: true }).then(response=>{
-  console.log("resp",response)
   let student = req.body
   let newStudent = new Enroll(student);
-  console.log("newstd",newStudent);
    newStudent.save((err, data)=>{
      console.log("data", data)
     if(err){
@@ -80,6 +77,65 @@ static viewAssignment(req, res) {
   
 
 }
+
+/**
+   * @method
+   * @description students can view all courses 
+   * @static
+   * @returns {object} object
+  */
+ static viewAllCourses(req, res) {
+  Courses.find({}, (error, courses) => {
+   let courseMap = {};
+   courses.forEach((course) => {
+     courseMap[course._id] = course;
+   });
+   if(error){
+     res.status(500).send({
+       error: error,
+       message: "Something went wrong"
+     })
+   }
+   else{
+     res.status(200).send({
+       data: courseMap
+     })
+   }
+
+  })
+
+}
+
+/**
+   * @method
+   * @description students can view all job posts
+   * @static
+   * @returns {object} object
+  */
+ static viewAllJobs(req, res) {
+  Jobs.find({}, (error, jobs) => {
+    let jobMap = {};
+    console.log(jobs);
+    jobs.forEach((job) => {
+      jobMap[job.companyName] = job;
+    });
+    if(error){
+      res.status(500).send({
+        error: error,
+        message: "Something went wrong"
+      })
+    }
+    else{
+      res.status(200).send({
+        data: jobMap
+      })
+    }
+ 
+   }) 
+
+ }
+
+
 
 
 }

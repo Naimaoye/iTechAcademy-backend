@@ -6,7 +6,9 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import uri from './config/db';
 import userRoute from './routes/userRoute';
-import studentRoute from './routes/studentRoute'
+import studentRoute from './routes/studentRoute';
+import adminRoute from './routes/adminRoute';
+import companyRoute from './routes/companies';
 
 const app = express();
 
@@ -22,6 +24,9 @@ app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1', userRoute);
 app.use('/api/v1', studentRoute);
+app.use('/api/v1', adminRoute);
+app.use('/api/v1', companyRoute);
+
 
 mongoose.connect(uri, (err) => {
   if(err){
@@ -71,7 +76,7 @@ if(!isProduction) {
     });
   });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4001;
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}`);
 });

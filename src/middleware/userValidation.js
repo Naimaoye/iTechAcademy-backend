@@ -2,6 +2,7 @@ import Joi from '@hapi/joi';
 import _ from 'lodash';
 import User from '../models/user';
 import Companies from '../models/companies';
+import Staff from '../models/staff';
 import Schemas from '../utils/validations';
 import bcrypt from 'bcryptjs';
 
@@ -140,6 +141,42 @@ const companyEmailExists = (req, res, next) => {
 
 }
 
+/**
+   * @function
+   * @description Check if user email exist, password correct and verified
+   * @param {object} req - Resquest object
+   * @param {object} res - Response object
+   * @param {object} next
+   * @returns {object} JSON response
+   */
+  const validateStaffLogin = (req, res, next) => {
+    const { password } = req.body;
+    Staff.findOne({ email: req.body.email.trim().toLowerCase() }).then(response => {
+      if (!response) {
+        return res.status(404).json({
+            status: 404, 
+            message: 'Your email does not exist, contact the admin'
+    });
+    }
+      bcrypt.compare(password, response.password, (err, isMatch) => {
+      if (!isMatch) {
+        return res.status(401).json({ 
+            status: 401, 
+            message: 'Your password is incorrect.'
+        });
+    }
+     if(err){
+       console.log(err);
+       return res.status(500).json({
+        status: 500, 
+        message: 'Database error'
+     });
+     }
+      next();
+    })
+})
+
+}
 
 /**
    * @function
@@ -202,6 +239,13 @@ const companyEmailExists = (req, res, next) => {
  
 
   export default {
-    validateEmail, validateLogin, validateUser, emailExists, validateCompanyLogin, resetPassword, companyEmailExists
+    validateEmail, 
+    validateLogin, 
+    validateUser, 
+    emailExists, 
+    validateCompanyLogin, 
+    resetPassword, 
+    companyEmailExists,
+    validateStaffLogin
   };
   

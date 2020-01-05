@@ -5,7 +5,6 @@ import sendEmails from '../utils/email';
 import transporter from '../utils/transporter';
 import User from '../models/user';
 import Companies from '../models/companies';
-import Staff from '../models/staff';
 
 /**
  * @class
@@ -66,9 +65,6 @@ export default class UserController {
         let result = {
           _id: response._id,
           email: response.email,
-          firstName: response.firstName,
-          lastName: response.lastName,
-          password: response.password,
           isAdmin: response.isAdmin,
           createdAt: response.createdAt
         };
@@ -79,7 +75,7 @@ export default class UserController {
         return res.status(201).json({
           status: 201, 
           message: msg,
-          data: { token, ...result }
+          data: { ...result }
         });
       }).catch((error) => {
         console.log(error);
@@ -108,7 +104,6 @@ export default class UserController {
           _id: response._id,
           email: response.email,
           companyName: response.companyName,
-          password: response.password,
           createdAt: response.createdAt
         };
         const { email, _id, companyName, createdAt } = result;
@@ -118,7 +113,7 @@ export default class UserController {
         return res.status(201).json({
           status: 201, 
           message: msg,
-          data: { token, ...result }
+          data: { ...result }
         });
       }).catch((error) => {
         console.log(error);
@@ -414,8 +409,7 @@ export default class UserController {
           status: 201,
           message: 'successfully updated your password',
           data: {
-            id: data.id,
-            password: data.password
+            id: data.id
           }
         })
         }
@@ -423,57 +417,5 @@ export default class UserController {
     });
 
   } 
-
-  /**
-   * @method addInstructor
-   * @description Medium between the database and UserController
-   * @static
-   * @param {object} userCredentials - data object
-   * @returns {object} JSON response
-   */
-  static async addInstructor(req, res) {
-    let { fullName, password, email, phoneNumber, course } = req.body;
-    course = course.split(',');
-    // console.log(newCourse,"course");
-    let instructor = {
-      fullName, password, email, phoneNumber, course
-    };
-    let isAdmin = req.user.isAdmin;
-     if (!isAdmin) {
-      console.log("isAdmin", isAdmin);
-      res.status(403).json({
-      status: 403,
-      error: 'Unauthorized!, contact your admin',
-    });
-  }
-  await Staff.findOne({ email: email.trim().toLowerCase() }).then(response=>{
-    if(!response){
-      let newInstructor = new Staff(instructor);
-      console.log("course",newInstructor);
-      newInstructor.save((err, data)=>{
-      console.log("data", data)
-    if(err){
-      console.log(error);
-      res.status(500).json({
-        status: 500, 
-        error: 'database error'
-      });
-    }
-    else{
-      res.status(201).json({
-        status: 201, 
-        data: data
-      });
-    }
-  })
-  }
-  else{
-    res.status(403).json({
-      status: 403, 
-      error: 'Instructor already exist'
-    })
-  }
-})
-} 
 
 }

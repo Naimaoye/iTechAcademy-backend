@@ -2,8 +2,7 @@ import Auth from '../middleware/Auth';
 import express from 'express';
 import userValidations from '../middleware/userValidation';
 import Courses from '../controllers/courses';
-import User from '../controllers/userController';
-
+import Staff from '../controllers/staff';
 
 const adminRoute = express.Router();
 
@@ -15,7 +14,12 @@ Courses.AddCourses
 
 adminRoute.post('/admin/add/instructors',
 Auth.userAuth,
-User.addInstructor
+Staff.addInstructor
+);
+
+adminRoute.get('/admin/instructors',
+Auth.userAuth,
+Staff.allInstructors
 );
 
 

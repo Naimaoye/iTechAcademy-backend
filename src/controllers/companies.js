@@ -20,9 +20,7 @@ export default class Companies {
       let newJob = new Jobs(job);
       newJob.save().then((data)=>{            
             Jobs.findOne({_id: data.id}).populate("company").then((data)=>{
-              console.log("find", data);
             data['companyName'] = data['company']['companyName'];
-
             data.save((err,data)=>{
               if(err){
                 res.status(500).send({

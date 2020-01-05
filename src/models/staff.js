@@ -7,6 +7,7 @@ const staffSchema =  new mongoose.Schema({
     password: { type: String, required: true },
     phoneNumber: { type: String },
     course: [{ type: String }],
+    isInstructor: { type: Boolean, default: true },
     dateAdded: { type: Date, default: Date.now }
 });
 

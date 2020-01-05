@@ -22,8 +22,11 @@ export default class Helper {
      */
 
     static generateToken(payload) {
+      let d = new Date();
+      let timer = 24 * 60 * 60 * 1000;
+      let calculatedExpiresIn = (((d.getTime()) + timer) - (d.getTime() - d.getMilliseconds()) / 1000);
       const token = jwt.sign(payload, secret, {
-        expiresIn: '24hr',
+        expiresIn: calculatedExpiresIn,
       });
       return token;
     }

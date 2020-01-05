@@ -41,7 +41,6 @@ static enrollStudents(req, res) {
   let student = req.body
   let newStudent = new Enroll(student);
    newStudent.save((err, data)=>{
-     console.log("data", data)
     if(err){
       console.log(error);
       res.status(500).json({
@@ -67,7 +66,7 @@ static enrollStudents(req, res) {
 
 }
 /**
-   * @method
+   * @method viewAssignment
    * @description 
    * @static
    * @param {string} email

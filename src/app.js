@@ -4,11 +4,12 @@ import cors from 'cors';
 import path from 'path';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
-import uri from './config/db';
+import {uri, devUri} from './config/db';
 import userRoute from './routes/userRoute';
 import studentRoute from './routes/studentRoute';
 import adminRoute from './routes/adminRoute';
 import companyRoute from './routes/companies';
+import staffRoute from './routes/staffRoute';
 
 const app = express();
 
@@ -26,9 +27,10 @@ app.use('/api/v1', userRoute);
 app.use('/api/v1', studentRoute);
 app.use('/api/v1', adminRoute);
 app.use('/api/v1', companyRoute);
+app.use('/api/v1', staffRoute);
 
 
-mongoose.connect(uri, (err) => {
+mongoose.connect(devUri, (err) => {
   if(err){
     console.log('error', err);
   }
